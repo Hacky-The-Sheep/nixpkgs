@@ -31,6 +31,7 @@ buildPythonPackage rec {
     certifi
     pylsqpack
     pyopenssl
+    service-identity
   ];
 
   buildInputs = [
@@ -39,7 +40,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    service-identity
   ];
 
   pythonImportsCheck = [
