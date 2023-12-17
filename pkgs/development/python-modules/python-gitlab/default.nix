@@ -2,6 +2,11 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+
+# build-system
+, setuptools
+
+# dependencies
 , argcomplete
 , requests
 , requests-toolbelt
@@ -11,7 +16,7 @@
 buildPythonPackage rec {
   pname = "python-gitlab";
   version = "4.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,6 +24,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-+HDXb5jJXQXEM5nXOx6qtZxnGzJ5ODDNL53fMsyTVB4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests
