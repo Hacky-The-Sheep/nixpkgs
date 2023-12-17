@@ -41,6 +41,11 @@ buildPythonPackage rec {
     pyzbar
   ];
 
+  disabledTests = [
+    # https://github.com/heuer/segno/issues/132
+    "test_plugin"
+  ];
+
   pythonImportsCheck = [
     "segno"
   ];
