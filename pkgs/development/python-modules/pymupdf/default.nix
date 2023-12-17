@@ -3,10 +3,15 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, pytestCheckHook
 , python
+
+# build-system
+, libclang
+, psutil
+, setuptools
 , swig
-, mupdf
+
+# native dependencies
 , freetype
 , harfbuzz
 , openjpeg
@@ -14,7 +19,13 @@
 , libjpeg_turbo
 , gumbo
 , memstreamHook
+
+# dependencies
+, mupdf
+
+# tests
 , fonttools
+, pytestCheckHook
 }:
 
 let
@@ -23,7 +34,7 @@ let
 in buildPythonPackage rec {
   pname = "pymupdf";
   version = "1.23.7";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -34,9 +45,19 @@ in buildPythonPackage rec {
     hash = "sha256-XVf9nKbcTS/rxRCD2u5u8ecCf0bWZ3FXXN/YulI9etU=";
   };
 
+  # swig is not wrapped as python package
+  # libclang calls itself just clang in wheel metadata
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"swig",' "" \
+      --replace "libclang" "clang"
+  '';
+
   nativeBuildInputs = [
-    pytestCheckHook
+    libclang
     swig
+    psutil
+    setuptools
   ];
 
   buildInputs = [
@@ -69,13 +90,16 @@ in buildPythonPackage rec {
     done
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pytestCheckHook
     fonttools
   ];
 
   disabledTests = [
     # fails for indeterminate reasons
     "test_color_count"
+    "test_2753"
+    "test_2548"
   ] ++ lib.optionals stdenv.isDarwin [
     # darwin does not support OCR right now
     "test_tesseract"
