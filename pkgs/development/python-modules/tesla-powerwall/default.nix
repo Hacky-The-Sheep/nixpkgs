@@ -5,12 +5,13 @@
 , pythonOlder
 , requests
 , responses
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "tesla-powerwall";
   version = "0.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-IqUxWwEvrSEbLAEnHG84oCV75qO0L5LmgpHOfaM6G8o=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests
