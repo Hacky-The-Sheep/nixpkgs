@@ -1,9 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 
 # build-system
 , setuptools
+
+# dependencies
+, importlib-metadata
 
 # tests
 , pytestCheckHook
@@ -25,6 +29,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+  ];
+
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
 
   nativeCheckInputs = [
