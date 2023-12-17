@@ -3,7 +3,6 @@
 , bx-py-utils
 , colorlog
 , fetchFromGitHub
-, fetchpatch
 , importlib-resources
 , jaraco-classes
 , jaraco-collections
@@ -37,17 +36,13 @@ buildPythonPackage rec {
     hash = "sha256-guLgmhjFgYLRZsQ0j92NXkktZ80bwVvMUJLZeg3dgxE=";
   };
 
-  patches = [
-    (fetchpatch {
-      # jaraco.functools 4.0 compat
-      url = "https://github.com/jaraco/jaraco.abode/commit/9e3e789efc96cddcaa15f920686bbeb79a7469e0.patch";
-      hash = "sha256-x96T/tTayagyLUEpIlytb71mCSs+GbItZSrdUUV6kEs=";
-    })
-  ];
-
   postPatch = ''
     # https://github.com/jaraco/jaraco.abode/issues/19
     echo "graft jaraco" > MANIFEST.in
+
+    # https://github.com/jaraco/jaraco.abode/commit/9e3e789efc96cddcaa15f920686bbeb79a7469e0
+    substituteInPlace jaraco/abode/helpers/timeline.py \
+      --replace "call_aside" "invoke"
   '';
 
   nativeBuildInputs = [
