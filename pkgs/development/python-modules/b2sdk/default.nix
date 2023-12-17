@@ -67,6 +67,7 @@ buildPythonPackage rec {
     "test_raw_api"
     "test_files_headers"
     "test_large_file"
+    "test_file_info_b2_attributes"
   ];
 
   pythonImportsCheck = [
