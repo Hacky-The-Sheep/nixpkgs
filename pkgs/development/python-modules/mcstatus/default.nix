@@ -56,6 +56,8 @@ buildPythonPackage rec {
     # DNS features are limited in the sandbox
     "test_query"
     "test_query_retry"
+    "test_resolve_localhost"
+    "test_async_resolve_localhost"
   ];
 
   meta = with lib; {
