@@ -1,30 +1,40 @@
 { lib
-, aiohttp
-, aiohttp-jinja2
-, aiohttp-remotes
-, aiohttp-swagger
-, buildPythonPackage
-, clickclick
-, decorator
 , fetchFromGitHub
-, flask
+, buildPythonPackage
+, pythonOlder
+
+# build-system
+, poetry-core
+
+# dependencies
+, asgiref
+, httpx
 , inflection
 , jsonschema
-, openapi-spec-validator
-, packaging
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
+, jinja2
+, python-multipart
 , pyyaml
 , requests
+, starlette
+, typing-extensions
+, werkzeug
+
+# optional-dependencies
+, a2wsgi
+, flask
 , swagger-ui-bundle
+, uvicorn
+
+# tests
+, pytest-aiohttp
+, pytestCheckHook
 , testfixtures
 }:
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "3.0.3";
-  format = "setuptools";
+  version = "3.0.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -32,31 +42,45 @@ buildPythonPackage rec {
     owner = "spec-first";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-YHENrlK+f25pQSVc733VuH6+t0Nwkkj4YUZsvU3dLT4=";
+    hash = "sha256-VaHdUxZ72JCm9zFMSEg3EW1uwfn+IIYy3yrtW9qC6rA=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    aiohttp-jinja2
-    aiohttp-swagger
-    clickclick
-    flask
-    inflection
-    jsonschema
-    openapi-spec-validator
-    packaging
-    pyyaml
-    requests
-    swagger-ui-bundle
+  nativeBuildInputs = [
+    poetry-core
   ];
 
+  propagatedBuildInputs = [
+    asgiref
+    httpx
+    inflection
+    jsonschema
+    jinja2
+    python-multipart
+    pyyaml
+    requests
+    starlette
+    typing-extensions
+    werkzeug
+  ];
+
+  passthru.optional-dependencies = {
+    flask = [
+      a2wsgi
+      flask
+    ];
+    swagger-ui = [
+      swagger-ui-bundle
+    ];
+    uvicorn = [
+      uvicorn
+    ];
+  };
+
   nativeCheckInputs = [
-    aiohttp-remotes
-    decorator
     pytest-aiohttp
     pytestCheckHook
     testfixtures
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "connexion"
