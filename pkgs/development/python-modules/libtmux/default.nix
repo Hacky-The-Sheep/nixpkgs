@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    sed -i '/addopts/d' setup.cfg
+    sed -i '/addopts/d' pyproject.toml
   '';
 
   nativeBuildInputs = [
