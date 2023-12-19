@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "babel";
-  version = "2.13.1";
+  version = "2.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Babel";
     inherit version;
-    hash = "sha256-M+CVLX3WN0r42/Z2jMTd88z+/CRPmYbUB0cE8vvRiQA=";
+    hash = "sha256-aRmGfbA2OYuiHrXHoPayirjLw656c6ROvjSudKTn02M=";
   };
 
   nativeBuildInputs = [
